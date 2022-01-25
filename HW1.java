@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class HW1 {
@@ -27,10 +26,27 @@ public class HW1 {
         int[] maxSubsequenceLengths = new int[arr.length];
         Arrays.fill(maxSubsequenceLengths, 1);
 
+        // stores indexes of all previous largest subsequence indexes
+        int[][] prevMaxIndexes = new int[arr.length][];
+        prevMaxIndexes[0] = new int[0];
+
+        /*
+         * prevMaxIndexes = [
+         * [],
+         * [-1],
+         * [-1, -1],
+         * [-1, -1, -1],
+         * [-1, -1, -1, -1]
+         * ]
+         */
+
         // [10, 9, 2, 5, 3, 1010, 7, 18]
         for (int i = 1; i < arr.length; i++) {
-            int maxSubsequenceLength = -1; // max length of all subsequences up to index i
+            int maxSubsequenceLength = -1; // max length of all subsequence up to index i
+            prevMaxIndexes[i] = new int[i]; // index(es) of last element(s) of all max subsequence(s)
+            Arrays.fill(prevMaxIndexes[i], -1); // fill prevMaxIndexes w/ sentinel values
 
+            // get max length of subsequence(s) up to i
             for (int j = 0; j < i; j++) {
                 int prevNum = arr[j];
                 int currentNum = arr[i];
@@ -41,10 +57,26 @@ public class HW1 {
                     maxSubsequenceLength = prevSubsequenceLength;
                 }
             }
+
+            // store last index(es) of preceding max subsequences
+            for (int j = 0; j < i; j++) {
+                int prevNum = arr[j];
+                int currentNum = arr[i];
+
+                if (currentNum > prevNum && maxSubsequenceLengths[j] >= maxSubsequenceLength)
+                    prevMaxIndexes[i][j] = j;
+            }
         }
 
-        System.out.println(Arrays.toString(maxSubsequenceLengths));
+        // for (int i = 0; i < prevMaxIndexes.length; i++) {
+        // System.out.println(i + ": " + Arrays.toString(prevMaxIndexes[i]));
+        // }
 
         return 0;
+    }
+
+    public static int[][] backtrack(int[] arr, int[][] indexes) {
+
+        return new int[0][];
     }
 }
