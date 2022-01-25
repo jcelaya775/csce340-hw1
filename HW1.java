@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class HW1 {
@@ -14,14 +15,14 @@ public class HW1 {
         // System.out.println(longestIncreasingSubsequence(arr4));
     }
 
-    /**
+    /*
      * Return a a list of the longest increasing subsequences
-     **/
-    public static int longestIncreasingSubsequence(int[] arr) {
+     */
+    public static int[][] longestIncreasingSubsequence(int[] arr) {
         if (arr.length == 1)
-            return arr[0]; // UPDATE TO RETURN AN ARRAY
+            return new int[][] { { arr[0] } };
         else if (arr.length == 0)
-            return 0; // UPDATE TO RETURN AN ARRAY
+            return new int[][] { {} };
 
         int[] maxSubsequenceLengths = new int[arr.length];
         Arrays.fill(maxSubsequenceLengths, 1);
@@ -30,19 +31,10 @@ public class HW1 {
         int[][] prevMaxIndexes = new int[arr.length][];
         prevMaxIndexes[0] = new int[0];
 
-        /*
-         * prevMaxIndexes = [
-         * [],
-         * [-1],
-         * [-1, -1],
-         * [-1, -1, -1],
-         * [-1, -1, -1, -1]
-         * ]
-         */
+        int maxSubsequenceLength = -1;
 
-        // [10, 9, 2, 5, 3, 1010, 7, 18]
         for (int i = 1; i < arr.length; i++) {
-            int maxSubsequenceLength = -1; // max length of all subsequence up to index i
+            maxSubsequenceLength = -1; // max length of all subsequences up to index i
             prevMaxIndexes[i] = new int[i]; // index(es) of last element(s) of all max subsequence(s)
             Arrays.fill(prevMaxIndexes[i], -1); // fill prevMaxIndexes w/ sentinel values
 
@@ -68,15 +60,31 @@ public class HW1 {
             }
         }
 
-        // for (int i = 0; i < prevMaxIndexes.length; i++) {
-        // System.out.println(i + ": " + Arrays.toString(prevMaxIndexes[i]));
-        // }
+        // find index(es) of max element of maxSubsequenceLengths
+        ArrayList<Integer> maxStartingPoints = new ArrayList<Integer>();
+        for (int i = 0; i < maxSubsequenceLengths.length; i++) {
+            if (maxSubsequenceLengths[i] == maxSubsequenceLength)
+                maxStartingPoints.add(i);
+        }
 
-        return 0;
+        // for each max starting point, backtrack to construct max subsequence
+
+        // return backtrack(arr, prevMaxIndexes, maxSubsequenceLength);
+        return new int[0][];
     }
 
-    public static int[][] backtrack(int[] arr, int[][] indexes) {
+    /*
+     * Works backwards to construct an array
+     * based on indexes of previous elements
+     */
+    public static ArrayList<int[]> backtrack(int[] arr, int[][] prevIndexPointers, ArrayList<int[]> newArrs,
+            int currentIndex, int pointerIndex, int newArrsIndex) {
+        // base case
+        if (prevIndexPointers[pointerIndex].length == 0) {
+            newArrs.get(newArrsIndex)[0] = arr[currentIndex];
+            return newArrs;
+        }
 
-        return new int[0][];
+        return new ArrayList<int[]>();
     }
 }
